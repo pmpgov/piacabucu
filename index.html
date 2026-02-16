@@ -6,47 +6,133 @@
     <title>Portal de Piaçabuçu</title>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
+        :root {
+            /* Cores oficiais de Piaçabuçu - AJUSTE CONFORME BRASÃO REAL */
+            --primary-color: #1E3A8A;  /* Azul oficial */
+            --secondary-color: #047857; /* Verde oficial */
+            --accent-color: #DC2626;   /* Vermelho oficial */
+            --light-bg: #F3F4F6;
+            --dark-text: #1F2937;
+            --white: #FFFFFF;
+        }
+    
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
         }
+    
         header {
-            background-color: #003366;
-            color: white;
-            padding: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 30px 20px;
             text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+    
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+    
+        header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            margin: 10px 0 0;
+        }
+    
         main {
             max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin: 30px auto;
+            padding: 30px;
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
-        footer {
-            background-color: #003366;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+    
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 10px;
+            display: inline-block;
         }
+    
+        h3 {
+            color: var(--dark-text);
+        }
+    
         .noticia-item {
-            border-bottom: 1px solid #eee;
-            padding: 15px 0;
+            border-left: 5px solid var(--secondary-color);
+            background-color: #F9FAFB;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .noticia-titulo {
-            color: #003366;
-            margin-bottom: 5px;
+    
+        .noticia-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
+    
+        .noticia-item h4 {
+            color: var(--primary-color);
+            margin: 0 0 10px 0;
+            font-size: 1.3em;
+        }
+    
         .noticia-data {
             color: #666;
             font-size: 0.9em;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+    
+        footer {
+            background: linear-gradient(135deg, var(--dark-text), #111827);
+            color: var(--white);
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+    
+        /* Botões estilizados (para uso futuro) */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+    
+        .btn:hover {
+            opacity: 0.9;
+        }
+    
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+    
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: var(--white);
+        }
+    
+        /* Responsividade */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            
+            main {
+                margin: 20px;
+                padding: 20px;
+            }
         }
     </style>
 </head>
