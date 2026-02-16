@@ -7,10 +7,10 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
         :root {
-            /* CORES ATUALIZADAS conforme nova identidade visual da Prefeitura (Fonte: Facebook oficial) */
-            --primary-color: #005CA9;  /* Azul oficial - representa o Rio São Francisco */
-            --secondary-color: #F3A43B; /* Amarelo/Dourado oficial - representa as dunas e otimismo */
-            --accent-color: #00A859;   /* Verde oficial - representa florestas e sustentabilidade */
+            /* CORES OFICIAIS DE PIAÇABUÇU */
+            --primary-color: #005CA9;  /* Azul oficial - Rio São Francisco */
+            --secondary-color: #F3A43B; /* Amarelo oficial - dunas e otimismo */
+            --accent-color: #00A859;   /* Verde oficial - florestas */
             --light-bg: #F3F4F6;
             --dark-text: #1F2937;
             --white: #FFFFFF;
@@ -30,26 +30,24 @@
             padding: 30px 20px;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-    
-        /* --- INÍCIO DAS ALTERAÇÕES SOLICITADAS (PASSO 4.3) --- */
-        header {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
     
-        header img {
-            height: 100px; /* Ajuste o tamanho conforme necessário */
+        /* --- BRASÃO COM CSS FIXO --- */
+        .brasao-oficial {
+            height: 100px;
             width: auto;
             margin-bottom: 15px;
             filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.2));
+            border-radius: 8px;
+            display: inline-block;
         }
-        /* --- FIM DAS ALTERAÇÕES --- */
     
         header h1 {
-            margin: 0;
+            margin: 10px 0 0;
             font-size: 2.5em;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
@@ -115,7 +113,7 @@
             margin-top: 40px;
         }
     
-        /* Botões estilizados (para uso futuro) */
+        /* Botões estilizados */
         .btn {
             display: inline-block;
             padding: 10px 20px;
@@ -154,9 +152,23 @@
 </head>
 <body>
     <header>
-        <!-- ATENÇÃO: Faça o upload da imagem "brasao.png" para o GitHub. -->
-        <!-- Recomendação: use o nome "brasao-piacabucu.png" ou "logo-prefeitura.png" -->
-        <img src="brasao.png" alt="Brasão de Piaçabuçu" onerror="this.style.display='none'">
+        <!-- 🔴 SOLUÇÃO 1: Caminho direto e simples -->
+        <img src="brasao-piacabucu.png" 
+             alt="Brasão de Piaçabuçu" 
+             class="brasao-oficial"
+             onerror="this.onerror=null; this.src='https://via.placeholder.com/100x100/005CA9/FFFFFF?text=PIAÇABUÇU';">
+        
+        <!-- 🔴 SOLUÇÃO 2: Backup com JavaScript (se a imagem não carregar) -->
+        <script>
+            // Verifica se a imagem carregou
+            setTimeout(function() {
+                var img = document.querySelector('.brasao-oficial');
+                if (img && !img.complete) {
+                    img.src = 'https://via.placeholder.com/100x100/005CA9/FFFFFF?text=PIAÇABUÇU';
+                }
+            }, 1000);
+        </script>
+        
         <h1>Portal Municipal de Piaçabuçu</h1>
         <p>Transparência e Informação para o Cidadão</p>
     </header>
