@@ -3,230 +3,1031 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Piaçabuçu</title>
+    <title>Prefeitura Municipal de Piaçabuçu - Portal Oficial</title>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ===== VARIÁVEIS - CORES OFICIAIS DE PIAÇABUÇU ===== */
         :root {
-            /* CORES OFICIAIS DE PIAÇABUÇU */
-            --primary-color: #005CA9;  /* Azul oficial - Rio São Francisco */
-            --secondary-color: #F3A43B; /* Amarelo oficial - dunas e otimismo */
-            --accent-color: #00A859;   /* Verde oficial - florestas */
+            --primary: #005CA9;      /* Azul oficial - Rio São Francisco */
+            --secondary: #F3A43B;    /* Amarelo/Dourado oficial - Dunas */
+            --accent: #00A859;       /* Verde oficial - Florestas */
+            --dark: #003366;          /* Azul escuro para contrastes */
+            --light: #F5F9FF;         /* Fundo claro */
             --light-bg: #F3F4F6;
             --dark-text: #1F2937;
             --white: #FFFFFF;
+            --gray: #6B7280;
         }
-    
-        body {
-            font-family: Arial, sans-serif;
+        
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
             background-color: var(--light-bg);
             color: var(--dark-text);
+            line-height: 1.6;
+            font-size: 16px;
         }
-    
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* ===== HEADER COM BRASÃO ===== */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: var(--white);
-            padding: 30px 20px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
         }
-    
-        /* --- BRASÃO COM CSS FIXO --- */
-        .brasao-oficial {
-            height: 100px;
+        
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .brasao {
+            height: 90px;
             width: auto;
-            margin-bottom: 15px;
-            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.2));
-            border-radius: 8px;
-            display: inline-block;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 5px;
+            transition: transform 0.3s;
         }
-    
-        header h1 {
-            margin: 10px 0 0;
-            font-size: 2.5em;
+        
+        .brasao:hover {
+            transform: scale(1.05);
+        }
+        
+        .titulo-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
-    
-        header p {
-            font-size: 1.2em;
+        
+        .titulo-header p {
+            font-size: 1rem;
             opacity: 0.95;
-            margin: 10px 0 0;
+            font-style: italic;
         }
-    
-        main {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 30px;
-            background-color: var(--white);
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        
+        /* ===== MENU DE NAVEGAÇÃO ===== */
+        .nav-menu ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
         }
-    
-        h2 {
-            color: var(--primary-color);
-            border-bottom: 3px solid var(--secondary-color);
-            padding-bottom: 10px;
-            display: inline-block;
-        }
-    
-        h3 {
-            color: var(--dark-text);
-        }
-    
-        .noticia-item {
-            border-left: 5px solid var(--secondary-color);
-            background-color: #F9FAFB;
-            margin: 20px 0;
-            padding: 20px;
-            border-radius: 8px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-    
-        .noticia-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        }
-    
-        .noticia-item h4 {
-            color: var(--primary-color);
-            margin: 0 0 10px 0;
-            font-size: 1.3em;
-        }
-    
-        .noticia-data {
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-    
-        footer {
-            background: linear-gradient(135deg, var(--dark-text), #111827);
+        
+        .nav-menu a {
             color: var(--white);
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 0;
+            border-bottom: 2px solid transparent;
         }
-    
-        /* Botões estilizados */
-        .btn {
+        
+        .nav-menu a:hover {
+            border-bottom-color: var(--white);
+            transform: translateY(-2px);
+        }
+        
+        .nav-menu a i {
+            font-size: 1rem;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+        
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: linear-gradient(rgba(0, 51, 102, 0.85), rgba(0, 92, 169, 0.85)), 
+                        url('https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--white);
+            padding: 100px 0;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: fadeInDown 1s ease;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            opacity: 0.95;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        
+        .btn-hero {
             display: inline-block;
-            padding: 10px 20px;
-            border-radius: 6px;
+            background-color: var(--secondary);
+            color: var(--dark);
+            padding: 15px 40px;
+            border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
-            transition: opacity 0.2s;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(243, 164, 59, 0.4);
+            animation: fadeInUp 1s ease 0.4s both;
+            border: 2px solid transparent;
         }
-    
-        .btn:hover {
-            opacity: 0.9;
+        
+        .btn-hero:hover {
+            background-color: var(--white);
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            border-color: var(--primary);
         }
-    
-        .btn-primary {
-            background-color: var(--primary-color);
+        
+        /* ===== SEÇÕES ===== */
+        .section-title {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 50px;
+            font-size: 2.3rem;
+            position: relative;
+            font-weight: 700;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+        
+        /* ===== NOTÍCIAS ===== */
+        .noticias-container {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 60px;
+        }
+        
+        .noticias-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .noticia-card {
+            background: var(--light);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            border-left: 5px solid var(--secondary);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .noticia-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,92,169,0.15);
+        }
+        
+        .noticia-conteudo {
+            padding: 25px;
+            flex-grow: 1;
+        }
+        
+        .noticia-titulo {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .noticia-data {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .noticia-resumo {
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+        
+        /* ===== SECRETARIAS ===== */
+        .secretarias-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .secretaria-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            border-bottom: 4px solid transparent;
+        }
+        
+        .secretaria-card:hover {
+            transform: translateX(5px);
+            border-bottom-color: var(--secondary);
+            box-shadow: 0 8px 25px rgba(0,92,169,0.12);
+        }
+        
+        .secretaria-card h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .secretaria-card h4 i {
+            color: var(--secondary);
+            font-size: 1.5rem;
+        }
+        
+        .secretaria-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        /* ===== TRANSPARÊNCIA ===== */
+        .transparencia-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .transparencia-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .transparencia-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,168,89,0.15);
+        }
+        
+        .transparencia-header {
+            background: linear-gradient(135deg, var(--light), var(--white));
+            padding: 20px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .transparencia-header h3 {
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .transparencia-content {
+            padding: 20px;
+        }
+        
+        .transparencia-list {
+            list-style: none;
+        }
+        
+        .transparencia-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .transparencia-list li:hover {
+            color: var(--primary);
+            padding-left: 5px;
+            background-color: var(--light);
+        }
+        
+        .transparencia-list li i {
+            color: var(--secondary);
+        }
+        
+        /* ===== FOOTER ===== */
+        .footer {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
             color: var(--white);
+            padding: 60px 0 30px;
+            margin-top: 60px;
         }
-    
-        .btn-secondary {
-            background-color: var(--secondary-color);
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-col h3 {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-col h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .footer-links a:hover {
             color: var(--white);
+            padding-left: 8px;
         }
-    
-        /* Responsividade */
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .social-icons a {
+            color: var(--white);
+            font-size: 1.8rem;
+            transition: all 0.3s;
+        }
+        
+        .social-icons a:hover {
+            color: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+            font-size: 0.95rem;
+        }
+        
+        /* ===== ACESSIBILIDADE ===== */
+        .accessibility-bar {
+            background-color: var(--dark);
+            padding: 10px 0;
+            font-size: 0.9rem;
+        }
+        
+        .accessibility-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 25px;
+        }
+        
+        .accessibility-btn {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.8);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .accessibility-btn:hover {
+            color: var(--secondary);
+        }
+        
+        /* ===== ANIMAÇÕES ===== */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        /* ===== RESPONSIVIDADE ===== */
+        @media (max-width: 1024px) {
+            .titulo-header h1 { font-size: 1.5rem; }
+            .hero h2 { font-size: 2.3rem; }
+        }
+        
         @media (max-width: 768px) {
-            header h1 {
-                font-size: 2em;
+            .mobile-menu-btn {
+                display: block;
             }
             
-            main {
-                margin: 20px;
+            .nav-menu {
+                position: fixed;
+                top: 140px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 140px);
+                background: linear-gradient(135deg, var(--primary), var(--dark));
+                transition: left 0.3s ease;
+                padding: 30px;
+                box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+                z-index: 999;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-menu ul {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .nav-menu a {
+                font-size: 1.1rem;
+                padding: 10px 0;
+            }
+            
+            .logo-area {
+                gap: 10px;
+            }
+            
+            .brasao {
+                height: 70px;
+            }
+            
+            .titulo-header h1 {
+                font-size: 1.2rem;
+            }
+            
+            .hero {
+                padding: 60px 0;
+            }
+            
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .noticias-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo-area {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .brasao {
+                height: 80px;
+            }
+            
+            .header-container {
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .noticias-container {
                 padding: 20px;
             }
+            
+            .secretarias-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ===== MODO ALTO CONTRASTE ===== */
+        .high-contrast {
+            background-color: #000 !important;
+            color: #fff !important;
+        }
+        
+        .high-contrast .header,
+        .high-contrast .footer,
+        .high-contrast .hero {
+            background: #000 !important;
+            border: 2px solid #fff !important;
+        }
+        
+        .high-contrast .noticia-card,
+        .high-contrast .secretaria-card,
+        .high-contrast .transparencia-card {
+            background-color: #222 !important;
+            color: #fff !important;
+            border: 1px solid #fff !important;
         }
     </style>
 </head>
 <body>
-    <header>
-        <!-- 🔴 SOLUÇÃO 1: Caminho direto e simples -->
-        <img src="brasao-piacabucu.png" 
-             alt="Brasão de Piaçabuçu" 
-             class="brasao-oficial"
-             onerror="this.onerror=null; this.src='https://via.placeholder.com/100x100/005CA9/FFFFFF?text=PIAÇABUÇU';">
-        
-        <!-- 🔴 SOLUÇÃO 2: Backup com JavaScript (se a imagem não carregar) -->
-        <script>
-            // Verifica se a imagem carregou
-            setTimeout(function() {
-                var img = document.querySelector('.brasao-oficial');
-                if (img && !img.complete) {
-                    img.src = 'https://via.placeholder.com/100x100/005CA9/FFFFFF?text=PIAÇABUÇU';
-                }
-            }, 1000);
-        </script>
-        
-        <h1>Portal Municipal de Piaçabuçu</h1>
-        <p>Transparência e Informação para o Cidadão</p>
+    <!-- BARRA DE ACESSIBILIDADE -->
+    <div class="accessibility-bar">
+        <div class="container accessibility-container">
+            <button class="accessibility-btn" id="contrastBtn">
+                <i class="fas fa-adjust"></i> Alto Contraste
+            </button>
+            <button class="accessibility-btn" id="fontIncrease">
+                <i class="fas fa-plus-circle"></i> A+
+            </button>
+            <button class="accessibility-btn" id="fontDecrease">
+                <i class="fas fa-minus-circle"></i> A-
+            </button>
+        </div>
+    </div>
+    
+    <!-- CABEÇALHO COM BRASÃO -->
+    <header class="header">
+        <div class="container header-container">
+            <div class="logo-area">
+                <img src="brasao-piacabucu.png" 
+                     alt="Brasão Oficial de Piaçabuçu" 
+                     class="brasao"
+                     onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2290%22%20height%3D%2290%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23005CA9%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2235%22%20fill%3D%22%23F3A43B%22%2F%3E%3Ctext%20x%3D%2250%22%20y%3D%2265%22%20font-size%3D%2230%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3EP%3C%2Ftext%3E%3C%2Fsvg%3E';">
+                <div class="titulo-header">
+                    <h1>Prefeitura Municipal de Piaçabuçu</h1>
+                    <p><i class="fas fa-water"></i> "A nossa força vem do povo e do Velho Chico"</p>
+                </div>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav class="nav-menu" id="navMenu">
+                <ul>
+                    <li><a href="#home"><i class="fas fa-home"></i> Início</a></li>
+                    <li><a href="#noticias"><i class="fas fa-newspaper"></i> Notícias</a></li>
+                    <li><a href="#secretarias"><i class="fas fa-landmark"></i> Secretarias</a></li>
+                    <li><a href="#transparencia"><i class="fas fa-eye"></i> Transparência</a></li>
+                    <li><a href="#servicos"><i class="fas fa-concierge-bell"></i> Serviços</a></li>
+                    <li><a href="#contato"><i class="fas fa-phone-alt"></i> Contato</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
     
-    <main>
-        <h2>Bem-vindo ao novo portal da cidade</h2>
-        <p>Este é o portal oficial em desenvolvimento.</p>
-        
-        <div id="noticias-container">
-            <h3>Últimas Notícias</h3>
-            <p>Carregando notícias...</p>
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>Bem-vindo ao Novo Portal de Piaçabuçu</h2>
+            <p>Mais moderno, acessível e transparente. A prefeitura mais perto de você, construindo o futuro da nossa cidade.</p>
+            <a href="#noticias" class="btn-hero"><i class="fas fa-rocket"></i> Últimas Notícias</a>
         </div>
-    </main>
+    </section>
     
-    <footer>
-        <p>&copy; 2024 Prefeitura Municipal de Piaçabuçu - AL</p>
+    <!-- NOTÍCIAS -->
+    <section class="container" id="noticias">
+        <h2 class="section-title">Últimas Notícias</h2>
+        <div class="noticias-container">
+            <div id="noticias-container">
+                <p style="text-align: center; color: var(--gray);">
+                    <i class="fas fa-spinner fa-spin"></i> Carregando notícias...
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- SECRETARIAS -->
+    <section class="container" id="secretarias">
+        <h2 class="section-title">Secretarias Municipais</h2>
+        <div class="secretarias-grid">
+            <div class="secretaria-card">
+                <h4><i class="fas fa-heartbeat"></i> Saúde</h4>
+                <p>Gestão da saúde pública com postos de saúde, farmácia básica e programas de prevenção.</p>
+            </div>
+            <div class="secretaria-card">
+                <h4><i class="fas fa-graduation-cap"></i> Educação</h4>
+                <p>Escolas municipais, merenda escolar, transporte e programas educacionais.</p>
+            </div>
+            <div class="secretaria-card">
+                <h4><i class="fas fa-hard-hat"></i> Infraestrutura</h4>
+                <p>Obras, manutenção urbana, iluminação pública e pavimentação.</p>
+            </div>
+            <div class="secretaria-card">
+                <h4><i class="fas fa-hand-holding-heart"></i> Assistência Social</h4>
+                <p>CRAS, programas sociais, Bolsa Família e atendimento à população.</p>
+            </div>
+            <div class="secretaria-card">
+                <h4><i class="fas fa-seedling"></i> Meio Ambiente</h4>
+                <p>Preservação do Rio São Francisco, dunas e educação ambiental.</p>
+            </div>
+            <div class="secretaria-card">
+                <h4><i class="fas fa-briefcase"></i> Desenvolvimento Econômico</h4>
+                <p>Apoio ao empreendedor, geração de emprego e turismo local.</p>
+            </div>
+            <div class="secretaria-card">
+                <h4><i class="fas fa-tint"></i> Agricultura e Pesca</h4>
+                <p>Apoio aos pescadores e agricultores familiares da região.</p>
+            </div>
+            <div class="secretaria-card">
+                <h4><i class="fas fa-palette"></i> Cultura e Turismo</h4>
+                <p>Valorização da cultura local e desenvolvimento do turismo.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- TRANSPARÊNCIA -->
+    <section class="container" id="transparencia">
+        <h2 class="section-title">Portal da Transparência</h2>
+        <div class="transparencia-grid">
+            <div class="transparencia-card">
+                <div class="transparencia-header">
+                    <h3><i class="fas fa-file-invoice-dollar"></i> Orçamento e Finanças</h3>
+                </div>
+                <div class="transparencia-content">
+                    <ul class="transparencia-list">
+                        <li>Execução Orçamentária <i class="fas fa-chevron-right"></i></li>
+                        <li>Despesas Públicas <i class="fas fa-chevron-right"></i></li>
+                        <li>Receitas Municipais <i class="fas fa-chevron-right"></i></li>
+                        <li>Relatórios da LDO <i class="fas fa-chevron-right"></i></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="transparencia-card">
+                <div class="transparencia-header">
+                    <h3><i class="fas fa-gavel"></i> Licitações e Contratos</h3>
+                </div>
+                <div class="transparencia-content">
+                    <ul class="transparencia-list">
+                        <li>Editais em Andamento <i class="fas fa-chevron-right"></i></li>
+                        <li>Resultados <i class="fas fa-chevron-right"></i></li>
+                        <li>Contratos Vigentes <i class="fas fa-chevron-right"></i></li>
+                        <li>Pregões <i class="fas fa-chevron-right"></i></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="transparencia-card">
+                <div class="transparencia-header">
+                    <h3><i class="fas fa-users"></i> Servidores Públicos</h3>
+                </div>
+                <div class="transparencia-content">
+                    <ul class="transparencia-list">
+                        <li>Folha de Pagamento <i class="fas fa-chevron-right"></i></li>
+                        <li>Diário Oficial <i class="fas fa-chevron-right"></i></li>
+                        <li>Concursos Públicos <i class="fas fa-chevron-right"></i></li>
+                        <li>Processos Seletivos <i class="fas fa-chevron-right"></i></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FOOTER -->
+    <footer class="footer" id="contato">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>Piaçabuçu</h3>
+                    <p>Localizada na foz do Rio São Francisco, nossa cidade é rica em cultura, história e belezas naturais.</p>
+                    <div class="social-icons">
+                        <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Links Úteis</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Portal do Cidadão</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Ouvidoria</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Serviços Online</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Turismo</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Notícias</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contato</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Tv. São Pedro, 63 - Centro</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <span>(82) 3552-1155</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>contato@piacabucu.al.gov.br</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <span>Seg a Sex: 8h às 14h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2024 Prefeitura Municipal de Piaçabuçu - AL. Todos os direitos reservados.</p>
+                <p style="margin-top: 10px; font-size: 0.85rem;">Desenvolvido com tecnologia e dedicação para servir melhor à população.</p>
+            </div>
+        </div>
     </footer>
-
+    
     <script>
-        // Configuração do Supabase
+        // ===== CONFIGURAÇÃO DO SUPABASE =====
         const SUPABASE_URL = 'https://bncfkvwshauvnhkzxeke.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJuY2ZrdndzaGF1dm5oa3p4ZWtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyNjYzNjUsImV4cCI6MjA4Njg0MjM2NX0.8rTbTCkYfRTLhVQWRFX3FD7LoHpxufY81J22FJBuPcQ';
-
+        
         // Criar cliente Supabase
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // Função para buscar notícias
+        
+        // ===== FUNÇÃO PARA CARREGAR NOTÍCIAS =====
         async function carregarNoticias() {
-          try {
-            const { data, error } = await supabaseClient
-              .from('noticias')
-              .select('*')
-              .order('created_at', { ascending: false })
-              .limit(5);
-            
-            if (error) throw error;
-            
-            const container = document.getElementById('noticias-container');
-            if (container) {
-              if (data && data.length > 0) {
-                container.innerHTML = '<h3>Últimas Notícias</h3>' + data.map(noticia => `
-                  <div class="noticia-item">
-                    <h4>${noticia.titulo}</h4>
-                    <div class="noticia-data">${new Date(noticia.created_at).toLocaleDateString('pt-BR')}</div>
-                    <p>${noticia.conteudo}</p>
-                  </div>
-                `).join('');
-              } else {
-                container.innerHTML = '<h3>Últimas Notícias</h3><p>Nenhuma notícia cadastrada ainda.</p>';
-              }
+            try {
+                const { data, error } = await supabaseClient
+                    .from('noticias')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(6);
+                
+                if (error) throw error;
+                
+                const container = document.getElementById('noticias-container');
+                
+                if (container) {
+                    if (data && data.length > 0) {
+                        let noticiasHTML = '<div class="noticias-grid">';
+                        
+                        data.forEach(noticia => {
+                            const dataFormatada = new Date(noticia.created_at).toLocaleDateString('pt-BR', {
+                                day: '2-digit',
+                                month: 'long',
+                                year: 'numeric'
+                            });
+                            
+                            const resumo = noticia.conteudo.length > 150 
+                                ? noticia.conteudo.substring(0, 150) + '...' 
+                                : noticia.conteudo;
+                            
+                            noticiasHTML += `
+                                <div class="noticia-card fade-in">
+                                    <div class="noticia-conteudo">
+                                        <h3 class="noticia-titulo">${noticia.titulo}</h3>
+                                        <div class="noticia-data">
+                                            <i class="fas fa-calendar-alt"></i> ${dataFormatada}
+                                        </div>
+                                        <p class="noticia-resumo">${resumo}</p>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        
+                        noticiasHTML += '</div>';
+                        container.innerHTML = noticiasHTML;
+                    } else {
+                        container.innerHTML = `
+                            <div style="text-align: center; padding: 40px;">
+                                <i class="fas fa-newspaper" style="font-size: 3rem; color: var(--secondary);"></i>
+                                <p style="margin-top: 20px; font-size: 1.2rem;">Nenhuma notícia cadastrada ainda.</p>
+                                <p style="color: var(--gray);">Em breve, as últimas notícias da nossa cidade.</p>
+                            </div>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Erro ao carregar notícias:', error);
+                const container = document.getElementById('noticias-container');
+                if (container) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #dc2626;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 3rem;"></i>
+                            <p style="margin-top: 20px;">Erro ao carregar notícias. Tente novamente mais tarde.</p>
+                        </div>
+                    `;
+                }
             }
-          } catch (error) {
-            console.error('Erro ao carregar notícias:', error);
-          }
         }
-
-        // Carregar notícias quando a página carregar
-        document.addEventListener('DOMContentLoaded', carregarNoticias);
+        
+        // ===== MENU MOBILE =====
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navMenu = document.getElementById('navMenu');
+        
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                mobileMenuBtn.innerHTML = navMenu.classList.contains('active') 
+                    ? '<i class="fas fa-times"></i>' 
+                    : '<i class="fas fa-bars"></i>';
+            });
+        }
+        
+        // Fechar menu ao clicar em link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
+        
+        // ===== ACESSIBILIDADE =====
+        const contrastBtn = document.getElementById('contrastBtn');
+        const fontIncrease = document.getElementById('fontIncrease');
+        const fontDecrease = document.getElementById('fontDecrease');
+        const body = document.body;
+        
+        // Alto Contraste
+        if (contrastBtn) {
+            contrastBtn.addEventListener('click', () => {
+                body.classList.toggle('high-contrast');
+                contrastBtn.innerHTML = body.classList.contains('high-contrast')
+                    ? '<i class="fas fa-adjust"></i> Contraste Normal'
+                    : '<i class="fas fa-adjust"></i> Alto Contraste';
+                localStorage.setItem('highContrast', body.classList.contains('high-contrast'));
+            });
+        }
+        
+        // Verificar preferência salva
+        if (localStorage.getItem('highContrast') === 'true') {
+            body.classList.add('high-contrast');
+            if (contrastBtn) {
+                contrastBtn.innerHTML = '<i class="fas fa-adjust"></i> Contraste Normal';
+            }
+        }
+        
+        // Tamanho da fonte
+        fontIncrease.addEventListener('click', () => {
+            changeFontSize(1);
+        });
+        
+        fontDecrease.addEventListener('click', () => {
+            changeFontSize(-1);
+        });
+        
+        function changeFontSize(direction) {
+            const currentSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+            const newSize = currentSize + (direction * 2);
+            
+            if (newSize >= 14 && newSize <= 22) {
+                document.documentElement.style.fontSize = newSize + 'px';
+                localStorage.setItem('fontSize', newSize);
+            }
+        }
+        
+        // Aplicar tamanho da fonte salvo
+        const savedFontSize = localStorage.getItem('fontSize');
+        if (savedFontSize) {
+            document.documentElement.style.fontSize = savedFontSize + 'px';
+        }
+        
+        // ===== ANIMAÇÃO DE APARECIMENTO =====
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.noticia-card, .secretaria-card, .transparencia-card').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // ===== INICIALIZAÇÃO =====
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarNoticias();
+            console.log('✅ Portal de Piaçabuçu carregado com sucesso!');
+        });
+        
+        // ===== SCROLL SUAVE =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
