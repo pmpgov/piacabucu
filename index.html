@@ -1,0 +1,40 @@
+// Configuração do Supabase
+const SUPABASE_URL = 'https://bncfkvwshauvnhkzxeke.supabase.co';
+const SUPABASE_ANON_KEY = 'cole_sua_chave_anon_aqui';
+
+// Criar cliente Supabase
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Função para buscar notícias
+async function carregarNoticias() {
+  try {
+    const { data, error } = await supabaseClient
+      .from('noticias')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(5);
+    
+    if (error) throw error;
+    
+    // Atualizar a página com as notícias
+    const container = document.getElementById('noticias-container');
+    if (container) {
+      if (data && data.length > 0) {
+        container.innerHTML = '<h3>Últimas Notícias</h3>' + data.map(noticia => `
+          <div class="noticia-item">
+            <h4>${noticia.titulo}</h4>
+            <div class="noticia-data">${new Date(noticia.created_at).toLocaleDateString('pt-BR')}</div>
+            <p>${noticia.conteudo}</p>
+          </div>
+        `).join('');
+      } else {
+        container.innerHTML = '<h3>Últimas Notícias</h3><p>Nenhuma notícia cadastrada ainda.</p>';
+      }
+    }
+  } catch (error) {
+    console.error('Erro ao carregar notícias:', error);
+  }
+}
+
+// Carregar notícias quando a página carregar
+document.addEventListener('DOMContentLoaded', carregarNoticias);
