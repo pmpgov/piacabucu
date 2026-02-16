@@ -1,40 +1,115 @@
-// Configuração do Supabase
-const SUPABASE_URL = 'https://bncfkvwshauvnhkzxeke.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJuY2ZrdndzaGF1dm5oa3p4ZWtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyNjYzNjUsImV4cCI6MjA4Njg0MjM2NX0.8rTbTCkYfRTLhVQWRFX3FD7LoHpxufY81J22FJBuPcQ';
-
-// Criar cliente Supabase
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// Função para buscar notícias
-async function carregarNoticias() {
-  try {
-    const { data, error } = await supabaseClient
-      .from('noticias')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(5);
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Piaçabuçu</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .noticia-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        .noticia-titulo {
+            color: #003366;
+            margin-bottom: 5px;
+        }
+        .noticia-data {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Portal Municipal de Piaçabuçu</h1>
+        <p>Transparência e Informação para o Cidadão</p>
+    </header>
     
-    if (error) throw error;
+    <main>
+        <h2>Bem-vindo ao novo portal da cidade</h2>
+        <p>Este é o portal oficial em desenvolvimento.</p>
+        
+        <div id="noticias-container">
+            <h3>Últimas Notícias</h3>
+            <p>Carregando notícias...</p>
+        </div>
+    </main>
     
-    // Atualizar a página com as notícias
-    const container = document.getElementById('noticias-container');
-    if (container) {
-      if (data && data.length > 0) {
-        container.innerHTML = '<h3>Últimas Notícias</h3>' + data.map(noticia => `
-          <div class="noticia-item">
-            <h4>${noticia.titulo}</h4>
-            <div class="noticia-data">${new Date(noticia.created_at).toLocaleDateString('pt-BR')}</div>
-            <p>${noticia.conteudo}</p>
-          </div>
-        `).join('');
-      } else {
-        container.innerHTML = '<h3>Últimas Notícias</h3><p>Nenhuma notícia cadastrada ainda.</p>';
-      }
-    }
-  } catch (error) {
-    console.error('Erro ao carregar notícias:', error);
-  }
-}
+    <footer>
+        <p>&copy; 2024 Prefeitura Municipal de Piaçabuçu - AL</p>
+    </footer>
 
-// Carregar notícias quando a página carregar
-document.addEventListener('DOMContentLoaded', carregarNoticias);
+    <script>
+        // Configuração do Supabase
+        const SUPABASE_URL = 'https://bncfkvwshauvnhkzxeke.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJuY2ZrdndzaGF1dm5oa3p4ZWtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyNjYzNjUsImV4cCI6MjA4Njg0MjM2NX0.8rTbTCkYfRTLhVQWRFX3FD7LoHpxufY81J22FJBuPcQ';
+
+        // Criar cliente Supabase
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Função para buscar notícias
+        async function carregarNoticias() {
+          try {
+            const { data, error } = await supabaseClient
+              .from('noticias')
+              .select('*')
+              .order('created_at', { ascending: false })
+              .limit(5);
+            
+            if (error) throw error;
+            
+            const container = document.getElementById('noticias-container');
+            if (container) {
+              if (data && data.length > 0) {
+                container.innerHTML = '<h3>Últimas Notícias</h3>' + data.map(noticia => `
+                  <div class="noticia-item">
+                    <h4>${noticia.titulo}</h4>
+                    <div class="noticia-data">${new Date(noticia.created_at).toLocaleDateString('pt-BR')}</div>
+                    <p>${noticia.conteudo}</p>
+                  </div>
+                `).join('');
+              } else {
+                container.innerHTML = '<h3>Últimas Notícias</h3><p>Nenhuma notícia cadastrada ainda.</p>';
+              }
+            }
+          } catch (error) {
+            console.error('Erro ao carregar notícias:', error);
+          }
+        }
+
+        // Carregar notícias quando a página carregar
+        document.addEventListener('DOMContentLoaded', carregarNoticias);
+    </script>
+</body>
+</html>
