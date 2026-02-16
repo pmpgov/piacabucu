@@ -7,10 +7,10 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
         :root {
-            /* Cores oficiais de Piaçabuçu - AJUSTE CONFORME BRASÃO REAL */
-            --primary-color: #1E3A8A;  /* Azul oficial */
-            --secondary-color: #047857; /* Verde oficial */
-            --accent-color: #DC2626;   /* Vermelho oficial */
+            /* CORES ATUALIZADAS conforme nova identidade visual da Prefeitura (Fonte: Facebook oficial) */
+            --primary-color: #005CA9;  /* Azul oficial - representa o Rio São Francisco */
+            --secondary-color: #F3A43B; /* Amarelo/Dourado oficial - representa as dunas e otimismo */
+            --accent-color: #00A859;   /* Verde oficial - representa florestas e sustentabilidade */
             --light-bg: #F3F4F6;
             --dark-text: #1F2937;
             --white: #FFFFFF;
@@ -31,6 +31,22 @@
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+    
+        /* --- INÍCIO DAS ALTERAÇÕES SOLICITADAS (PASSO 4.3) --- */
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    
+        header img {
+            height: 100px; /* Ajuste o tamanho conforme necessário */
+            width: auto;
+            margin-bottom: 15px;
+            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.2));
+        }
+        /* --- FIM DAS ALTERAÇÕES --- */
     
         header h1 {
             margin: 0;
@@ -138,6 +154,9 @@
 </head>
 <body>
     <header>
+        <!-- ATENÇÃO: Faça o upload da imagem "brasao.png" para o GitHub. -->
+        <!-- Recomendação: use o nome "brasao-piacabucu.png" ou "logo-prefeitura.png" -->
+        <img src="brasao.png" alt="Brasão de Piaçabuçu" onerror="this.style.display='none'">
         <h1>Portal Municipal de Piaçabuçu</h1>
         <p>Transparência e Informação para o Cidadão</p>
     </header>
