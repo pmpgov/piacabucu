@@ -18,6 +18,9 @@
             --dark-text: #1F2937;
             --white: #FFFFFF;
             --gray: #6B7280;
+            --error: #DC2626;
+            --warning: #F59E0B;
+            --success: #10B981;
         }
         
         * {
@@ -366,6 +369,100 @@
             color: var(--secondary);
         }
         
+        /* ===== ESTADOS DE CARREGAMENTO E ERRO ===== */
+        .loading-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .loading-spinner {
+            border: 4px solid var(--light);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #FEE2E2, #FEF3F2);
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .error-icon {
+            font-size: 4rem;
+            color: var(--error);
+            margin-bottom: 20px;
+        }
+        
+        .error-title {
+            font-size: 1.5rem;
+            color: var(--error);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .error-message {
+            color: var(--gray);
+            margin-bottom: 20px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .error-hint {
+            font-size: 0.9rem;
+            color: var(--gray);
+            background: rgba(0,0,0,0.05);
+            padding: 15px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        
+        .retry-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .retry-btn:hover {
+            background-color: var(--dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,92,169,0.3);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--light);
+            border-radius: 15px;
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+        
         /* ===== FOOTER ===== */
         .footer {
             background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
@@ -693,9 +790,10 @@
         <h2 class="section-title">Últimas Notícias</h2>
         <div class="noticias-container">
             <div id="noticias-container">
-                <p style="text-align: center; color: var(--gray);">
-                    <i class="fas fa-spinner fa-spin"></i> Carregando notícias...
-                </p>
+                <div class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <p>Carregando as últimas notícias de Piaçabuçu...</p>
+                </div>
             </div>
         </div>
     </section>
@@ -837,7 +935,7 @@
             </div>
             
             <div class="copyright">
-                <p>© 2026 Prefeitura Municipal de Piaçabuçu - AL. Todos os direitos reservados.</p>
+                <p>© 2024 Prefeitura Municipal de Piaçabuçu - AL. Todos os direitos reservados.</p>
                 <p style="margin-top: 10px; font-size: 0.85rem;">Desenvolvido com tecnologia e dedicação para servir melhor à população.</p>
             </div>
         </div>
@@ -848,74 +946,161 @@
         const SUPABASE_URL = 'https://bncfkvwshauvnhkzxeke.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJuY2ZrdndzaGF1dm5oa3p4ZWtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyNjYzNjUsImV4cCI6MjA4Njg0MjM2NX0.8rTbTCkYfRTLhVQWRFX3FD7LoHpxufY81J22FJBuPcQ';
         
-        // Criar cliente Supabase
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Variável para controle de tentativas
+        let tentativas = 0;
+        const MAX_TENTATIVAS = 2;
         
-        // ===== FUNÇÃO PARA CARREGAR NOTÍCIAS =====
-        async function carregarNoticias() {
+        // ===== FUNÇÃO PARA VERIFICAR CONEXÃO =====
+        async function verificarConexao() {
             try {
-                const { data, error } = await supabaseClient
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
+                
+                const response = await fetch('https://www.google.com', { 
+                    mode: 'no-cors',
+                    signal: controller.signal 
+                });
+                clearTimeout(timeoutId);
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+        
+        // ===== FUNÇÃO PARA CARREGAR NOTÍCIAS COM FALLBACK =====
+        async function carregarNoticias(tentarNovamente = false) {
+            const container = document.getElementById('noticias-container');
+            
+            // Mostrar loading
+            container.innerHTML = `
+                <div class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <p>${tentarNovamente ? 'Tentando novamente...' : 'Carregando as últimas notícias de Piaçabuçu...'}</p>
+                </div>
+            `;
+            
+            try {
+                tentativas++;
+                
+                // Tentativa 1: Supabase
+                const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                
+                const { data, error } = await supabase
                     .from('noticias')
                     .select('*')
                     .order('created_at', { ascending: false })
-                    .limit(6);
+                    .limit(6)
+                    .timeout(8000); // Timeout de 8 segundos
                 
                 if (error) throw error;
                 
-                const container = document.getElementById('noticias-container');
-                
-                if (container) {
-                    if (data && data.length > 0) {
-                        let noticiasHTML = '<div class="noticias-grid">';
-                        
-                        data.forEach(noticia => {
-                            const dataFormatada = new Date(noticia.created_at).toLocaleDateString('pt-BR', {
-                                day: '2-digit',
-                                month: 'long',
-                                year: 'numeric'
-                            });
-                            
-                            const resumo = noticia.conteudo.length > 150 
-                                ? noticia.conteudo.substring(0, 150) + '...' 
-                                : noticia.conteudo;
-                            
-                            noticiasHTML += `
-                                <div class="noticia-card fade-in">
-                                    <div class="noticia-conteudo">
-                                        <h3 class="noticia-titulo">${noticia.titulo}</h3>
-                                        <div class="noticia-data">
-                                            <i class="fas fa-calendar-alt"></i> ${dataFormatada}
-                                        </div>
-                                        <p class="noticia-resumo">${resumo}</p>
-                                    </div>
-                                </div>
-                            `;
+                if (data && data.length > 0) {
+                    // Sucesso! Mostrar notícias
+                    let noticiasHTML = '<div class="noticias-grid">';
+                    
+                    data.forEach(noticia => {
+                        const dataFormatada = new Date(noticia.created_at).toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: 'long',
+                            year: 'numeric'
                         });
                         
-                        noticiasHTML += '</div>';
-                        container.innerHTML = noticiasHTML;
-                    } else {
-                        container.innerHTML = `
-                            <div style="text-align: center; padding: 40px;">
-                                <i class="fas fa-newspaper" style="font-size: 3rem; color: var(--secondary);"></i>
-                                <p style="margin-top: 20px; font-size: 1.2rem;">Nenhuma notícia cadastrada ainda.</p>
-                                <p style="color: var(--gray);">Em breve, as últimas notícias da nossa cidade.</p>
+                        const resumo = noticia.conteudo.length > 150 
+                            ? noticia.conteudo.substring(0, 150) + '...' 
+                            : noticia.conteudo;
+                        
+                        noticiasHTML += `
+                            <div class="noticia-card fade-in">
+                                <div class="noticia-conteudo">
+                                    <h3 class="noticia-titulo">${noticia.titulo}</h3>
+                                    <div class="noticia-data">
+                                        <i class="fas fa-calendar-alt"></i> ${dataFormatada}
+                                    </div>
+                                    <p class="noticia-resumo">${resumo}</p>
+                                </div>
                             </div>
                         `;
-                    }
-                }
-            } catch (error) {
-                console.error('Erro ao carregar notícias:', error);
-                const container = document.getElementById('noticias-container');
-                if (container) {
+                    });
+                    
+                    noticiasHTML += '</div>';
+                    container.innerHTML = noticiasHTML;
+                    tentativas = 0; // Resetar tentativas
+                } else {
+                    // Nenhuma notícia encontrada
                     container.innerHTML = `
-                        <div style="text-align: center; padding: 40px; color: #dc2626;">
-                            <i class="fas fa-exclamation-triangle" style="font-size: 3rem;"></i>
-                            <p style="margin-top: 20px;">Erro ao carregar notícias. Tente novamente mais tarde.</p>
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-newspaper"></i>
+                            </div>
+                            <h3 style="color: var(--primary); margin-bottom: 10px;">Nenhuma notícia cadastrada</h3>
+                            <p style="color: var(--gray);">Em breve, as últimas notícias da nossa cidade serão publicadas aqui.</p>
                         </div>
                     `;
                 }
+                
+            } catch (error) {
+                console.error('Erro detalhado:', error);
+                
+                // Verificar se é erro de DNS/URL
+                if (error.message && error.message.includes('Failed to fetch')) {
+                    // Tentar novamente uma vez
+                    if (tentativas < MAX_TENTATIVAS) {
+                        setTimeout(() => carregarNoticias(true), 2000);
+                    } else {
+                        mostrarErroDNS(container);
+                    }
+                } else {
+                    // Outros erros
+                    mostrarErroGenerico(container, error);
+                }
             }
+        }
+        
+        // ===== FUNÇÕES DE ERRO ESPECÍFICAS =====
+        function mostrarErroDNS(container) {
+            container.innerHTML = `
+                <div class="error-state">
+                    <div class="error-icon">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h3 class="error-title">Problema de Conexão</h3>
+                    <p class="error-message">
+                        Não foi possível conectar ao servidor de notícias.<br>
+                        Isso pode ser causado por:
+                    </p>
+                    <div class="error-hint">
+                        <p>🔹 Bloqueio de rede ou firewall</p>
+                        <p>🔹 Configuração de DNS</p>
+                        <p>🔹 Instabilidade na internet</p>
+                    </div>
+                    <button onclick="window.location.reload()" class="retry-btn">
+                        <i class="fas fa-sync-alt"></i> Tentar Novamente
+                    </button>
+                    <p style="margin-top: 15px; font-size: 0.85rem;">
+                        Enquanto isso, confira nossas secretarias e serviços abaixo
+                    </p>
+                </div>
+            `;
+        }
+        
+        function mostrarErroGenerico(container, error) {
+            container.innerHTML = `
+                <div class="error-state">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3 class="error-title">Erro ao Carregar</h3>
+                    <p class="error-message">
+        Ocorreu um erro ao carregar as notícias.
+                    </p>
+                    <div class="error-hint">
+                        <i class="fas fa-code"></i> ${error.message || 'Erro desconhecido'}
+                    </div>
+                    <button onclick="window.location.reload()" class="retry-btn">
+                        <i class="fas fa-redo-alt"></i> Recarregar Página
+                    </button>
+                </div>
+            `;
         }
         
         // ===== MENU MOBILE =====
@@ -1005,13 +1190,23 @@
             });
         }, observerOptions);
         
-        document.querySelectorAll('.noticia-card, .secretaria-card, .transparencia-card').forEach(el => {
+        document.querySelectorAll('.secretaria-card, .transparencia-card').forEach(el => {
             observer.observe(el);
         });
         
         // ===== INICIALIZAÇÃO =====
         document.addEventListener('DOMContentLoaded', () => {
-            carregarNoticias();
+            // Verificar conexão antes de carregar notícias
+            verificarConexao().then(online => {
+                if (online) {
+                    carregarNoticias();
+                } else {
+                    // Se não há internet, mostrar erro específico
+                    const container = document.getElementById('noticias-container');
+                    mostrarErroDNS(container);
+                }
+            });
+            
             console.log('✅ Portal de Piaçabuçu carregado com sucesso!');
         });
         
@@ -1028,6 +1223,50 @@
                 }
             });
         });
+        
+        // ===== DADOS DE EXEMPLO PARA TESTE (SE NECESSÁRIO) =====
+        const dadosExemplo = [
+            {
+                titulo: "Piaçabuçu celebra o Dia do Rio São Francisco",
+                data: "2024-10-03",
+                conteudo: "A prefeitura organizou uma programação especial em homenagem ao Velho Chico, com atividades culturais e ambientais."
+            },
+            {
+                titulo: "Novas vagas de emprego disponíveis no SINE",
+                data: "2024-10-02",
+                conteudo: "O posto do SINE municipal divulgou novas oportunidades de trabalho para moradores da cidade."
+            },
+            {
+                titulo: "Vacinação contra a gripe é prorrogada",
+                data: "2024-10-01",
+                conteudo: "A Secretaria de Saúde informa que a campanha de vacinação contra a gripe foi prorrogada até o final do mês."
+            }
+        ];
+        
+        // Função para testar com dados locais (descomente se quiser testar)
+        /*
+        function testarComDadosExemplo() {
+            const container = document.getElementById('noticias-container');
+            let noticiasHTML = '<div class="noticias-grid">';
+            
+            dadosExemplo.forEach(noticia => {
+                noticiasHTML += `
+                    <div class="noticia-card fade-in">
+                        <div class="noticia-conteudo">
+                            <h3 class="noticia-titulo">${noticia.titulo}</h3>
+                            <div class="noticia-data">
+                                <i class="fas fa-calendar-alt"></i> ${new Date(noticia.data).toLocaleDateString('pt-BR')}
+                            </div>
+                            <p class="noticia-resumo">${noticia.conteudo}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            noticiasHTML += '</div>';
+            container.innerHTML = noticiasHTML;
+        }
+        */
     </script>
 </body>
 </html>
