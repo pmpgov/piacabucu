@@ -44,11 +44,11 @@
             padding: 0 20px;
         }
         
-        /* ===== HEADER COM BRASÃO ===== */
+        /* ===== HEADER COM BRASÃO E QR CODE ===== */
         .header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: var(--white);
-            padding: 20px 0;
+            padding: 15px 0;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             position: sticky;
             top: 0;
@@ -60,16 +60,18 @@
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
+            gap: 15px;
         }
         
         .logo-area {
             display: flex;
             align-items: center;
             gap: 20px;
+            flex: 1;
         }
         
         .brasao {
-            height: 90px;
+            height: 80px;
             width: auto;
             filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
             background-color: rgba(255,255,255,0.1);
@@ -83,15 +85,50 @@
         }
         
         .titulo-header h1 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             margin-bottom: 5px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
         .titulo-header p {
-            font-size: 1rem;
+            font-size: 0.95rem;
             opacity: 0.95;
             font-style: italic;
+        }
+        
+        /* ===== QR CODE NO HEADER ===== */
+        .qrcode-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 15px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .qrcode-header img {
+            height: 50px;
+            width: 50px;
+            border-radius: 8px;
+            background: white;
+            padding: 5px;
+            transition: transform 0.3s;
+        }
+        
+        .qrcode-header img:hover {
+            transform: scale(1.1);
+        }
+        
+        .qrcode-header span {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .qrcode-header small {
+            font-size: 0.75rem;
+            opacity: 0.9;
         }
         
         /* ===== MENU DE NAVEGAÇÃO ===== */
@@ -367,6 +404,54 @@
         
         .transparencia-list li i {
             color: var(--secondary);
+        }
+        
+        /* ===== QR CODE NO FOOTER ===== */
+        .qrcode-footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 25px 15px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .qrcode-footer img {
+            width: 130px;
+            height: 130px;
+            border-radius: 15px;
+            background: white;
+            padding: 10px;
+            margin-bottom: 15px;
+            transition: transform 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .qrcode-footer img:hover {
+            transform: scale(1.05);
+        }
+        
+        .qrcode-footer h4 {
+            color: var(--white);
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .qrcode-footer p {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .qrcode-footer .site-url {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
         
         /* ===== ESTADOS DE CARREGAMENTO E ERRO ===== */
@@ -681,6 +766,10 @@
             .noticias-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .qrcode-header {
+                display: none; /* Esconde QR do header no mobile */
+            }
         }
         
         @media (max-width: 480px) {
@@ -745,7 +834,7 @@
         </div>
     </div>
     
-    <!-- CABEÇALHO COM BRASÃO -->
+    <!-- CABEÇALHO COM BRASÃO E QR CODE -->
     <header class="header">
         <div class="container header-container">
             <div class="logo-area">
@@ -756,6 +845,17 @@
                 <div class="titulo-header">
                     <h1>Prefeitura Municipal de Piaçabuçu</h1>
                     <p><i class="fas fa-water"></i> "A nossa força vem do povo e do Velho Chico"</p>
+                </div>
+            </div>
+            
+            <!-- QR CODE NO HEADER (VERSÃO COMPACTA) -->
+            <div class="qrcode-header">
+                <img src="QR-code-ZPlU.png" 
+                     alt="QR Code do Portal" 
+                     onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2250%22%20height%3D%2250%22%20viewBox%3D%220%200%2050%2050%22%3E%3Crect%20width%3D%2250%22%20height%3D%2250%22%20fill%3D%22%23F3A43B%22%2F%3E%3Ccircle%20cx%3D%2225%22%20cy%3D%2225%22%20r%3D%2215%22%20fill%3D%22%23005CA9%22%2F%3E%3Ctext%20x%3D%2225%22%20y%3D%2230%22%20font-size%3D%2212%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3EQR%3C%2Ftext%3E%3C%2Fsvg%3E';">
+                <div>
+                    <span>Acesse pelo celular</span><br>
+                    <small>Aponte a câmera</small>
                 </div>
             </div>
             
@@ -934,6 +1034,16 @@
                 </div>
             </div>
             
+            <!-- QR CODE NO FOOTER (VERSÃO COMPLETA) -->
+            <div class="qrcode-footer">
+                <img src="QR-code-ZPlU.png" 
+                     alt="QR Code do Portal" 
+                     onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22130%22%20height%3D%22130%22%20viewBox%3D%220%200%20130%20130%22%3E%3Crect%20width%3D%22130%22%20height%3D%22130%22%20fill%3D%22%23F3A43B%22%2F%3E%3Ccircle%20cx%3D%2265%22%20cy%3D%2265%22%20r%3D%2240%22%20fill%3D%22%23005CA9%22%2F%3E%3Ctext%20x%3D%2265%22%20y%3D%2275%22%20font-size%3D%2230%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3EQR%3C%2Ftext%3E%3C%2Fsvg%3E';">
+                <h4>Acesse pelo celular</h4>
+                <p>Aponte a câmera do seu smartphone</p>
+                <div class="site-url">piacabucu.al.gov.br</div>
+            </div>
+            
             <div class="copyright">
                 <p>© 2024 Prefeitura Municipal de Piaçabuçu - AL. Todos os direitos reservados.</p>
                 <p style="margin-top: 10px; font-size: 0.85rem;">Desenvolvido com tecnologia e dedicação para servir melhor à população.</p>
@@ -946,7 +1056,7 @@
         const SUPABASE_URL = 'https://bncfkvwshauvnhkzxeke.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJuY2ZrdndzaGF1dm5oa3p4ZWtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyNjYzNjUsImV4cCI6MjA4Njg0MjM2NX0.8rTbTCkYfRTLhVQWRFX3FD7LoHpxufY81J22FJBuPcQ';
         
-        // Inicializar cliente Supabase (fora da função para estar disponível globalmente)
+        // Inicializar cliente Supabase
         let supabaseClient;
         
         try {
@@ -959,24 +1069,7 @@
         let tentativas = 0;
         const MAX_TENTATIVAS = 2;
         
-        // ===== FUNÇÃO PARA VERIFICAR CONEXÃO =====
-        async function verificarConexao() {
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000);
-                
-                const response = await fetch('https://www.google.com', { 
-                    mode: 'no-cors',
-                    signal: controller.signal 
-                });
-                clearTimeout(timeoutId);
-                return true;
-            } catch (error) {
-                return false;
-            }
-        }
-        
-        // ===== DADOS DE EXEMPLO (FALLBACK) =====
+        // Dados de exemplo (fallback)
         const noticiasExemplo = [
             {
                 titulo: "Piaçabuçu celebra o Dia do Rio São Francisco",
@@ -992,105 +1085,42 @@
                 titulo: "Vacinação contra a gripe é prorrogada",
                 created_at: "2024-10-01",
                 conteudo: "A Secretaria de Saúde informa que a campanha de vacinação contra a gripe foi prorrogada até o final do mês em todas as unidades."
-            },
-            {
-                titulo: "Prefeitura anuncia reforma de escolas municipais",
-                created_at: "2024-09-28",
-                conteudo: "Serão investidos R$ 2 milhões na reforma de 5 escolas da rede municipal, beneficiando mais de 1.500 alunos."
-            },
-            {
-                titulo: "Programa de castração gratuita de animais começa segunda",
-                created_at: "2024-09-25",
-                conteudo: "Ação em parceria com o governo estadual oferecerá 200 castrações gratuitas para cães e gatos."
             }
         ];
         
-        // ===== FUNÇÃO PARA CARREGAR NOTÍCIAS (COM FALLBACK) =====
-        async function carregarNoticias(tentarNovamente = false) {
+        // Função para carregar notícias
+        async function carregarNoticias() {
             const container = document.getElementById('noticias-container');
-            
-            // Verificar se o container existe
             if (!container) return;
             
-            // Mostrar loading
-            container.innerHTML = `
-                <div class="loading-state">
-                    <div class="loading-spinner"></div>
-                    <p>${tentarNovamente ? 'Tentando novamente...' : 'Carregando as últimas notícias de Piaçabuçu...'}</p>
-                </div>
-            `;
-            
             try {
-                tentativas++;
-                
-                // Verificar se o Supabase foi inicializado corretamente
                 if (!supabaseClient) {
                     throw new Error('Cliente Supabase não inicializado');
                 }
                 
-                // Tentativa 1: Supabase com timeout
-                const { data, error } = await Promise.race([
-                    supabaseClient
-                        .from('noticias')
-                        .select('*')
-                        .order('created_at', { ascending: false })
-                        .limit(6),
-                    new Promise((_, reject) => 
-                        setTimeout(() => reject(new Error('Timeout na requisição')), 8000)
-                    )
-                ]);
+                const { data, error } = await supabaseClient
+                    .from('noticias')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(6);
                 
                 if (error) throw error;
                 
                 if (data && data.length > 0) {
-                    // Sucesso! Mostrar notícias do Supabase
                     mostrarNoticias(data, container);
-                    console.log('Notícias carregadas do Supabase:', data.length);
                 } else {
-                    // Se não há dados, mostrar mensagem de vazio
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-icon">
-                                <i class="fas fa-newspaper"></i>
-                            </div>
-                            <h3 style="color: var(--primary); margin-bottom: 10px;">Nenhuma notícia cadastrada</h3>
-                            <p style="color: var(--gray);">Em breve, as últimas notícias da nossa cidade serão publicadas aqui.</p>
-                        </div>
-                    `;
+                    // Se não há dados no Supabase, usa exemplo
+                    mostrarNoticias(noticiasExemplo, container);
                 }
-                
-                tentativas = 0; // Resetar tentativas
                 
             } catch (error) {
-                console.error('Erro detalhado:', error);
-                
-                // Se falhou e ainda tem tentativas, tenta novamente
-                if (tentativas < MAX_TENTATIVAS) {
-                    console.log(`Tentativa ${tentativas} falhou. Tentando novamente em 2s...`);
-                    setTimeout(() => carregarNoticias(true), 2000);
-                } else {
-                    // Se todas as tentativas falharam, usar dados de exemplo
-                    console.log('Usando dados de exemplo como fallback');
-                    mostrarNoticias(noticiasExemplo, container);
-                    
-                    // Mostrar aviso sutil
-                    const aviso = document.createElement('div');
-                    aviso.style.cssText = `
-                        background-color: var(--warning);
-                        color: white;
-                        padding: 10px;
-                        border-radius: 5px;
-                        margin-top: 10px;
-                        font-size: 0.9rem;
-                        text-align: center;
-                    `;
-                    aviso.innerHTML = '<i class="fas fa-info-circle"></i> Mostrando notícias de exemplo (modo demonstração)';
-                    container.parentElement.insertBefore(aviso, container.nextSibling);
-                }
+                console.error('Erro ao carregar notícias:', error);
+                // Em caso de erro, usa dados de exemplo
+                mostrarNoticias(noticiasExemplo, container);
             }
         }
         
-        // ===== FUNÇÃO PARA MOSTRAR NOTÍCIAS =====
+        // Função para mostrar notícias
         function mostrarNoticias(noticias, container) {
             let noticiasHTML = '<div class="noticias-grid">';
             
@@ -1122,7 +1152,7 @@
             container.innerHTML = noticiasHTML;
         }
         
-        // ===== MENU MOBILE =====
+        // Menu mobile
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navMenu = document.getElementById('navMenu');
         
@@ -1145,32 +1175,21 @@
             });
         });
         
-        // ===== ACESSIBILIDADE =====
+        // Acessibilidade
         const contrastBtn = document.getElementById('contrastBtn');
         const fontIncrease = document.getElementById('fontIncrease');
         const fontDecrease = document.getElementById('fontDecrease');
         const body = document.body;
         
-        // Alto Contraste
         if (contrastBtn) {
             contrastBtn.addEventListener('click', () => {
                 body.classList.toggle('high-contrast');
                 contrastBtn.innerHTML = body.classList.contains('high-contrast')
                     ? '<i class="fas fa-adjust"></i> Contraste Normal'
                     : '<i class="fas fa-adjust"></i> Alto Contraste';
-                localStorage.setItem('highContrast', body.classList.contains('high-contrast'));
             });
         }
         
-        // Verificar preferência salva
-        if (localStorage.getItem('highContrast') === 'true') {
-            body.classList.add('high-contrast');
-            if (contrastBtn) {
-                contrastBtn.innerHTML = '<i class="fas fa-adjust"></i> Contraste Normal';
-            }
-        }
-        
-        // Tamanho da fonte
         if (fontIncrease) {
             fontIncrease.addEventListener('click', () => {
                 changeFontSize(1);
@@ -1189,17 +1208,10 @@
             
             if (newSize >= 14 && newSize <= 22) {
                 document.documentElement.style.fontSize = newSize + 'px';
-                localStorage.setItem('fontSize', newSize);
             }
         }
         
-        // Aplicar tamanho da fonte salvo
-        const savedFontSize = localStorage.getItem('fontSize');
-        if (savedFontSize) {
-            document.documentElement.style.fontSize = savedFontSize + 'px';
-        }
-        
-        // ===== ANIMAÇÃO DE APARECIMENTO =====
+        // Animações
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -1217,40 +1229,13 @@
             observer.observe(el);
         });
         
-        // ===== INICIALIZAÇÃO =====
+        // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('🚀 Inicializando Portal de Piaçabuçu...');
-            
-            // Verificar se o Supabase está disponível
-            if (typeof supabase === 'undefined') {
-                console.error('Biblioteca Supabase não carregada!');
-                const container = document.getElementById('noticias-container');
-                if (container) {
-                    container.innerHTML = `
-                        <div class="error-state">
-                            <div class="error-icon">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </div>
-                            <h3 class="error-title">Erro de Configuração</h3>
-                            <p class="error-message">
-                                Biblioteca do Supabase não foi carregada corretamente.
-                            </p>
-                            <button onclick="window.location.reload()" class="retry-btn">
-                                <i class="fas fa-redo-alt"></i> Recarregar Página
-                            </button>
-                        </div>
-                    `;
-                }
-                return;
-            }
-            
-            // Carregar notícias
             carregarNoticias();
-            
             console.log('✅ Portal de Piaçabuçu carregado com sucesso!');
         });
         
-        // ===== SCROLL SUAVE =====
+        // Scroll suave
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
